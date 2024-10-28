@@ -1,0 +1,28 @@
+.App {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .left-column {
+    width: 40%; /* 1/3 width for the left column */
+    padding: 1rem;
+    background-color: #f8f9fa;
+    overflow-y: auto;
+  }
+  
+  .right-column {
+    width: 60%; /* 2/3 width for the map */
+    height: 100%;
+  }
+  
+  .d-flex {
+    display: flex;
+  }
+  
+  .flex-column {
+    flex-direction: column;
+  }
+  
+  .show-whitespace { 
+    white-space: pre-wrap;
+  }
