@@ -111,7 +111,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({
                 <div key={index}>
                   <strong>
                     <p>{chunk.title}</p>
-                    <em>Distance: {chunk.distance_from_location}</em>
+                    <em>Distance: {chunk.distance_from_location} meters</em>
                   </strong>
                   <p></p>
                   <em>
