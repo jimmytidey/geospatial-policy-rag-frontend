@@ -24,7 +24,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({
 
     try {
       const response = await fetch(
-        "http://localhost:8000/get_location_summary",
+        import.meta.env.VITE_API_PATH + "/get_location_summary",
         {
           method: "POST",
           headers: {
@@ -44,6 +44,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({
       }
 
       const data = await response.json();
+      console.log(data);
       setSummary(data);
     } catch (error) {
       console.error("Error fetching summary:", error);
@@ -110,7 +111,9 @@ const InfoBox: React.FC<InfoBoxProps> = ({
                 <div key={index}>
                   <strong>
                     <p>{chunk.title}</p>
+                    <em>Distance: {chunk.distance_from_location}</em>
                   </strong>
+                  <p></p>
                   <em>
                     <p>{chunk.sections}</p>
                   </em>

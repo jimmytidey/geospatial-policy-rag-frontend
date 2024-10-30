@@ -12,12 +12,13 @@ export interface Location {
 export interface TextFragment {
   lat?: number;
   lng?: number;
+  distance_from_location?: string;
   chunk_id?: string;
   location_name?: string;
   title: string;
   sections: string;
-  text: string; // New field to represent the text content
-  labels: string[]; // New field to represent the labels
+  text: string;
+  labels: string[];
 }
 
 // The summary that comes back from the summarization API

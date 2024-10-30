@@ -64,7 +64,7 @@ const Map: React.FC<MapProps> = ({
       const controller = new AbortController();
 
       try {
-        let url = "http://localhost:8000/get_top_locations";
+        let url = import.meta.env.VITE_API_PATH + "/get_top_locations";
         if (selectedLabel) {
           url += `?labels=${encodeURIComponent(selectedLabel)}`;
         }
