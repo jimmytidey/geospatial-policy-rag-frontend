@@ -4,7 +4,7 @@ import Map from "./components/Map";
 import DropDown from "./components/DropDown";
 import InfoBox from "./components/InfoBox";
 import { Marker } from "maplibre-gl";
-import { Location } from "./types"; // Adjust the path based on your project structure
+import { Location, Polygon } from "./types";
 
 function App() {
   console.log("App.tsx");
@@ -13,6 +13,7 @@ function App() {
     null
   );
   const [selectedLabel, setSelectedLabel] = useState("");
+  const [polygons, setPolygons] = useState<Polygon[] | null>(null);
   const markersRef = useRef<Marker[]>([]); // Use ref to store markers
 
   return (
@@ -26,6 +27,7 @@ function App() {
         <InfoBox
           selectedLocation={selectedLocation}
           selectedLabel={selectedLabel}
+          setPolygons={setPolygons}
         />
       </div>
       <div className="right-column">
@@ -37,6 +39,8 @@ function App() {
           selectedLabel={selectedLabel}
           setSelectedLabel={setSelectedLabel}
           markersRef={markersRef}
+          polygons={polygons}
+          setPolygons={setPolygons}
         />
       </div>
     </div>

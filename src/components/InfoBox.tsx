@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-import { Location, Summary } from "../types";
+import { Location, Summary, Polygon, TextChunk } from "../types";
 
 interface InfoBoxProps {
   selectedLocation: Location | null;
   selectedLabel: string;
+  setPolygons: React.Dispatch<React.SetStateAction<Polygon[] | null>>;
 }
 
 const InfoBox: React.FC<InfoBoxProps> = ({
   selectedLocation,
   selectedLabel,
+  setPolygons,
 }) => {
   const [summary, setSummary] = useState<Summary>({
     summary: "Click on a location to view the summary",
@@ -44,7 +46,26 @@ const InfoBox: React.FC<InfoBoxProps> = ({
       }
 
       const data = await response.json();
-      console.log(data);
+
+      const textChunks = data.text_chunks;
+
+      //Dedupe polygons
+      const uniqueDocumentGeoms = new Set<string>();
+
+      textChunks.forEach((chunk: TextChunk) => {
+        if (chunk.document_geom) {
+          // Convert `document_geom` to a JSON string
+          const geomString = JSON.stringify(chunk.document_geom);
+          uniqueDocumentGeoms.add(geomString);
+        }
+      });
+
+      // Convert the Set of JSON strings back to objects
+      const uniqueDocumentGeomsArray = Array.from(uniqueDocumentGeoms).map(
+        (geom) => JSON.parse(geom)
+      );
+      setPolygons(uniqueDocumentGeomsArray);
+
       setSummary(data);
     } catch (error) {
       console.error("Error fetching summary:", error);

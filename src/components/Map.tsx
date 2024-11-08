@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { Location } from "../types";
+import { Location, Polygon } from "../types";
 import {
   Map as MapLibreMap,
   NavigationControl,
@@ -22,6 +22,8 @@ interface MapProps {
   selectedLabel: string;
   setSelectedLabel: React.Dispatch<React.SetStateAction<string>>;
   markersRef: React.MutableRefObject<Marker[]>;
+  polygons: Polygon[] | null;
+  setPolygons: React.Dispatch<React.SetStateAction<Polygon[] | null>>;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -30,6 +32,8 @@ const Map: React.FC<MapProps> = ({
   setSelectedLocation,
   selectedLabel,
   markersRef,
+  polygons,
+  setPolygons,
 }) => {
   const [mapInstance, setMapInstance] = useState<MapLibreMap | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -89,6 +93,45 @@ const Map: React.FC<MapProps> = ({
     fetchLocations();
   }, [selectedLabel, setLocations]);
 
+  // Add polygons to map
+  useEffect(() => {
+    if (!mapInstance) return;
+
+    console.log("Rendering polygons");
+
+    // Clear existing polygons
+    mapInstance.getStyle().layers?.forEach((layer) => {
+      if (layer.id.startsWith("polygon-")) {
+        mapInstance.removeLayer(layer.id);
+      }
+    });
+
+    // Add new polygons
+    if (!polygons) return;
+
+    polygons.forEach((polygon) => {
+      const randomNumber: number = Math.floor(Math.random() * 100000) + 1; // if layers are assigned ids from the loop index, it crashes on rerender
+      mapInstance.addLayer({
+        id: `polygon-${randomNumber}`,
+        type: "fill",
+        source: {
+          type: "geojson",
+          data: {
+            properties: {},
+            type: "Feature",
+            geometry: polygon,
+          },
+        },
+        layout: {},
+        paint: {
+          "fill-color": "#088",
+          "fill-opacity": 0.4,
+        },
+      });
+    });
+  }, [polygons]);
+
+  // Add markers to map
   useEffect(() => {
     if (!mapInstance || !locations) return;
 
@@ -117,6 +160,8 @@ const Map: React.FC<MapProps> = ({
       const handleClick = () => {
         console.log("Marker clicked", location);
         setSelectedLocation(location);
+        console.log("setting polygons to null");
+        setPolygons(null);
       };
 
       console.log("adding click event listener");
@@ -135,7 +180,7 @@ const Map: React.FC<MapProps> = ({
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
     };
-  }, [locations, mapInstance, setSelectedLocation]);
+  }, [locations, mapInstance, setSelectedLocation, setPolygons]);
 
   return <MapWrapper ref={mapContainerRef} id="main-map" />;
 };
