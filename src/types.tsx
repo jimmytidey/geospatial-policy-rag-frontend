@@ -1,4 +1,4 @@
-import { Feature, Polygon, GeoJsonProperties } from "geojson";
+import { Feature } from "geojson";
 
 // Interface for a single location entry
 export interface Location {
@@ -30,5 +30,3 @@ export interface Summary {
   prompt: string; // Optional properties can be marked with "?"
   text_chunks?: TextChunk[];
 }
-// Define types for geometry coordinates based on GeoJSON
-type Coordinates = [number, number][]; // Adjust based on geometry type (e.g., Polygon, MultiPolygon)

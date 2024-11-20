@@ -5,7 +5,7 @@ import DropDown from "./components/DropDown";
 import InfoBox from "./components/InfoBox";
 import { Marker } from "maplibre-gl";
 import { Location } from "./types";
-import { Feature, Polygon, GeoJsonProperties } from "geojson";
+import { Feature } from "geojson";
 function App() {
   console.log("App.tsx");
   const [locations, setLocations] = useState<Location[] | null>(null);

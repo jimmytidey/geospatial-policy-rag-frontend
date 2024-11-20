@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Location } from "../types";
-import { Feature, Polygon, GeoJsonProperties } from "geojson";
+import { Feature } from "geojson";
 
 import {
   Map as MapLibreMap,
