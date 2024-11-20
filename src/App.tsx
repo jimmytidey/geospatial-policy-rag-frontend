@@ -4,8 +4,8 @@ import Map from "./components/Map";
 import DropDown from "./components/DropDown";
 import InfoBox from "./components/InfoBox";
 import { Marker } from "maplibre-gl";
-import { Location, Polygon } from "./types";
-
+import { Location } from "./types";
+import { Feature, Polygon, GeoJsonProperties } from "geojson";
 function App() {
   console.log("App.tsx");
   const [locations, setLocations] = useState<Location[] | null>(null);
@@ -13,7 +13,7 @@ function App() {
     null
   );
   const [selectedLabel, setSelectedLabel] = useState("");
-  const [polygons, setPolygons] = useState<Polygon[] | null>(null);
+  const [polygons, setPolygons] = useState<Feature[] | null>(null);
   const markersRef = useRef<Marker[]>([]); // Use ref to store markers
 
   return (

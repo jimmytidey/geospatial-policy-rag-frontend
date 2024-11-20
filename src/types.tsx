@@ -1,3 +1,5 @@
+import { Feature, Polygon, GeoJsonProperties } from "geojson";
+
 // Interface for a single location entry
 export interface Location {
   lat: number; // Represents the latitude of the location
@@ -19,7 +21,7 @@ export interface TextChunk {
   sections: string;
   text: string;
   labels: string[];
-  document_geom?: Polygon;
+  document_geom?: Feature;
 }
 
 // The summary that comes back from the summarization API
@@ -28,8 +30,5 @@ export interface Summary {
   prompt: string; // Optional properties can be marked with "?"
   text_chunks?: TextChunk[];
 }
-
-export type Polygon = {
-  type: "Polygon"; // or more generally, string if there are multiple types like "Point", "LineString", etc.
-  coordinates: number[][][]; // For Polygon, this is an array of arrays of coordinate pairs
-};
+// Define types for geometry coordinates based on GeoJSON
+type Coordinates = [number, number][]; // Adjust based on geometry type (e.g., Polygon, MultiPolygon)

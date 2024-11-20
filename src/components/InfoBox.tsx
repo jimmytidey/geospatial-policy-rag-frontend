@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-import { Location, Summary, Polygon, TextChunk } from "../types";
+import { Location, Summary, TextChunk } from "../types";
+import { Feature } from "geojson";
 
 interface InfoBoxProps {
   selectedLocation: Location | null;
   selectedLabel: string;
-  setPolygons: React.Dispatch<React.SetStateAction<Polygon[] | null>>;
+  setPolygons: React.Dispatch<React.SetStateAction<Feature[] | null>>;
 }
 
 const InfoBox: React.FC<InfoBoxProps> = ({

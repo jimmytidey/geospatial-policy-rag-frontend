@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { Location, Polygon } from "../types";
+import { Location } from "../types";
+import { Feature, Polygon, GeoJsonProperties } from "geojson";
+
 import {
   Map as MapLibreMap,
   NavigationControl,
@@ -8,6 +10,7 @@ import {
   Popup,
 } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import centerOfMass from "@turf/center-of-mass";
 
 const MapWrapper = styled.div`
   height: 100%;
@@ -22,8 +25,8 @@ interface MapProps {
   selectedLabel: string;
   setSelectedLabel: React.Dispatch<React.SetStateAction<string>>;
   markersRef: React.MutableRefObject<Marker[]>;
-  polygons: Polygon[] | null;
-  setPolygons: React.Dispatch<React.SetStateAction<Polygon[] | null>>;
+  polygons: Feature[] | null;
+  setPolygons: React.Dispatch<React.SetStateAction<Feature[] | null>>;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -104,6 +107,9 @@ const Map: React.FC<MapProps> = ({
       if (layer.id.startsWith("polygon-")) {
         mapInstance.removeLayer(layer.id);
       }
+      if (layer.id.startsWith("labelLayer-")) {
+        mapInstance.removeLayer(layer.id);
+      }
     });
 
     // Add new polygons
@@ -111,23 +117,47 @@ const Map: React.FC<MapProps> = ({
 
     polygons.forEach((polygon) => {
       const randomNumber: number = Math.floor(Math.random() * 100000) + 1; // if layers are assigned ids from the loop index, it crashes on rerender
+
+      console.log("polygon", polygon);
+
+      mapInstance.addSource("polygonSource_" + randomNumber, {
+        type: "geojson",
+        data: polygon,
+      });
+
       mapInstance.addLayer({
         id: `polygon-${randomNumber}`,
         type: "fill",
-        source: {
-          type: "geojson",
-          data: {
-            properties: {},
-            type: "Feature",
-            geometry: polygon,
-          },
-        },
+        source: "polygonSource_" + randomNumber,
         layout: {},
         paint: {
           "fill-color": "#088",
           "fill-opacity": 0.4,
         },
       });
+
+      if (polygon.properties && polygon.properties.name) {
+        const labelPoints = centerOfMass(polygon, {
+          properties: { name: polygon.properties.name },
+        });
+
+        mapInstance.addSource("labelSource" + randomNumber, {
+          type: "geojson",
+          data: labelPoints,
+        });
+
+        console.log("labelPoints");
+        console.log(labelPoints);
+
+        mapInstance.addLayer({
+          id: `labelLayer-${randomNumber}`,
+          type: "symbol",
+          source: "labelSource" + randomNumber,
+          layout: {
+            "text-field": ["get", "name"],
+          },
+        });
+      }
     });
   }, [polygons]);
 
