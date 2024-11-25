@@ -1,5 +1,7 @@
 # Local Plans Geospatial RAG prototype
 
+View this code running: https://localplans-ai-map-61938e5fe7bf.herokuapp.com
+
 This project explores using AI to process and combine policy documents that refer to specific locations (locations, buildings, parks, etc).
 
 It uses planning policy in England as an example, a topic where its easy to find lots of publicly available policy documents.
