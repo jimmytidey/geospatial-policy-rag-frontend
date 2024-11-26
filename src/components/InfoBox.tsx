@@ -15,7 +15,8 @@ const InfoBox: React.FC<InfoBoxProps> = ({
   setPolygons,
 }) => {
   const [summary, setSummary] = useState<Summary>({
-    summary: "Click on a location to view the summary",
+    summary:
+      "This prototype combines the National Planning Policy Framework, Leeds' various Local Plan documents and Neighbourhood Plans from around Leeds. It provides a AI-powered summary of how those documents relate to specifc locations in and around Leeds. ",
     prompt: "",
   });
   const [selectedTab, setSelectedTab] = useState<"summary" | "prompt">(
